@@ -22,7 +22,7 @@ const services = [
         description: "Leveraging LLMs and machine learning to build intelligent software.",
     },
     {
-        icon: <Code className="w-8 h-8 text-blue-400" />,
+        icon: <Code className="w-8 h-8 text-primary" />,
         title: "Custom Software Development",
         description: "Bespoke software tailored to your specific business requirements.",
     },

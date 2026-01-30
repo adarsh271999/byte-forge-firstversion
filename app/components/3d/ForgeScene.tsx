@@ -1,76 +1,100 @@
 "use client";
 
 import { Canvas, useFrame } from "@react-three/fiber";
-import { PointMaterial, Points, Float } from "@react-three/drei";
-import { useState, useRef } from "react";
+import { Float, Icosahedron, Octahedron, Ring } from "@react-three/drei";
+import { useRef } from "react";
 import * as THREE from "three";
 
-function Sparks(props: any) {
-    const ref = useRef<THREE.Points>(null);
-    const [sphere] = useState(() => {
-        const coords = new Float32Array(500 * 3);
-        for (let i = 0; i < 500; i++) {
-            const theta = 2 * Math.PI * Math.random();
-            const phi = Math.acos(2 * Math.random() - 1);
-            const r = 1.5 * Math.cbrt(Math.random());
-
-            coords[i * 3] = r * Math.sin(phi) * Math.cos(theta); // x
-            coords[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta); // y
-            coords[i * 3 + 2] = r * Math.cos(phi); // z
-        }
-        return coords;
-    });
+function CyberneticNexus() {
+    const outerRef = useRef<THREE.Mesh>(null);
+    const innerRef = useRef<THREE.Mesh>(null);
+    const ringRef = useRef<THREE.Mesh>(null);
 
     useFrame((state, delta) => {
-        if (ref.current) {
-            ref.current.rotation.x -= delta / 10;
-            ref.current.rotation.y -= delta / 15;
+        const time = state.clock.getElapsedTime();
+
+        if (outerRef.current) {
+            // Slow, heavy rotation
+            outerRef.current.rotation.x = time * 0.1;
+            outerRef.current.rotation.y = time * 0.15;
+        }
+
+        if (innerRef.current) {
+            // Faster, opposing rotation
+            innerRef.current.rotation.x = -time * 0.2;
+            innerRef.current.rotation.z = time * 0.1;
+
+            // Pulse scale
+            const scale = 1 + Math.sin(time * 3) * 0.1;
+            innerRef.current.scale.set(scale, scale, scale);
+        }
+
+        if (ringRef.current) {
+            ringRef.current.rotation.x = Math.PI / 2 + Math.sin(time * 0.5) * 0.2;
+            ringRef.current.rotation.y = time * 0.2;
         }
     });
 
     return (
-        <group rotation={[0, 0, Math.PI / 4]}>
-            <Points ref={ref} positions={sphere} stride={3} frustumCulled={false} {...props}>
-                <PointMaterial
-                    transparent
-                    color="#3b82f6"
-                    size={0.05}
-                    sizeAttenuation={true}
-                    depthWrite={false}
-                    blending={THREE.AdditiveBlending}
-                />
-            </Points>
+        <group scale={1.2}>
+            <Float speed={2} rotationIntensity={0.5} floatIntensity={0.5}>
+
+                {/* 1. Outer Wireframe Shell - The "Hardware" */}
+                <Icosahedron args={[2, 1]} ref={outerRef}>
+                    <meshStandardMaterial
+                        color="#FF4500" // Fire Orange
+                        wireframe
+                        transparent
+                        opacity={0.3}
+                        side={THREE.DoubleSide}
+                        emissive="#FF4500"
+                        emissiveIntensity={0.2}
+                    />
+                </Icosahedron>
+
+                {/* 2. Inner Processing Core - The "AI" */}
+                <Octahedron args={[1.2, 0]} ref={innerRef}>
+                    <meshStandardMaterial
+                        color="#F97316" // Secondary Orange
+                        roughness={0.2}
+                        metalness={0.8}
+                        emissive="#FF4500"
+                        emissiveIntensity={0.5}
+                        wireframe={false} // Solid object ensures visibility
+                    />
+                </Octahedron>
+
+                {/* 3. Orbiting Data Ring - The "Connectivity" */}
+                <group ref={ringRef} rotation={[Math.PI / 2, 0, 0]}>
+                    <Ring args={[2.5, 2.6, 64]} >
+                        <meshBasicMaterial
+                            color="#FFFFFF"
+                            transparent
+                            opacity={0.1}
+                            side={THREE.DoubleSide}
+                        />
+                    </Ring>
+                </group>
+
+                {/* 4. Core Light Source */}
+                <pointLight distance={5} intensity={5} color="#FF8C00" />
+            </Float>
         </group>
     );
 }
 
-function GlowingOrb() {
-    return (
-        <Float speed={2} rotationIntensity={1} floatIntensity={0.5}>
-            <mesh>
-                <sphereGeometry args={[0.8, 32, 32]} />
-                <meshStandardMaterial
-                    color="#0a0a0a"
-                    emissive="#3b82f6"
-                    emissiveIntensity={0.5}
-                    roughness={0.1}
-                    metalness={0.8}
-                    wireframe
-                />
-            </mesh>
-        </Float>
-    )
-}
-
-
 export function ForgeScene() {
     return (
-        <div className="w-full h-full relative">
-            <Canvas camera={{ position: [0, 0, 3] }}>
+        <div className="w-full h-full relative overflow-hidden bg-black/20">
+            {/* Added a subtle background glow to separate scene from black void */}
+            <div className="absolute inset-0 bg-radial-gradient from-primary/5 to-transparent pointer-events-none" />
+
+            <Canvas camera={{ position: [0, 0, 6], fov: 45 }}>
                 <ambientLight intensity={0.5} />
-                <pointLight position={[10, 10, 10]} intensity={1} color="#ec4899" />
-                <Sparks />
-                <GlowingOrb />
+                <pointLight position={[10, 10, 10]} intensity={2} color="#FFFFFF" />
+                <pointLight position={[-10, -5, -10]} intensity={1} color="#FF4500" />
+
+                <CyberneticNexus />
             </Canvas>
         </div>
     );

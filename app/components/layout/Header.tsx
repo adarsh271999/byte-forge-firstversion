@@ -25,10 +25,13 @@ export function Header() {
                 className="w-full max-w-5xl bg-black/50 backdrop-blur-xl border border-white/10 rounded-full px-6 py-3 flex items-center justify-between shadow-2xl shadow-black/50"
             >
                 {/* Logo */}
+                {/* Logo */}
                 <Link href="/" className="flex items-center gap-2 z-50">
-                    <span className="text-xl font-bold tracking-tight text-white">
-                        Byte<span className="text-primary">Forge</span>
-                    </span>
+                    <img
+                        src="/logo.png"
+                        alt="ByteForge Logo"
+                        className="h-8 w-auto object-contain"
+                    />
                 </Link>
 
                 {/* Desktop Nav */}

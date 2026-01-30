@@ -9,9 +9,11 @@ export function Footer() {
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
                     <div className="col-span-1 md:col-span-2">
                         <Link href="/" className="inline-block mb-6">
-                            <span className="text-2xl font-bold tracking-tight text-white">
-                                Byte<span className="text-primary">Forge</span>
-                            </span>
+                            <img
+                                src="/logo.png"
+                                alt="ByteForge Logo"
+                                className="h-10 w-auto object-contain bg-transparent"
+                            />
                         </Link>
                         <p className="text-white/60 max-w-md leading-relaxed">
                             Crafting distinct digital experiences. We solve complex problems with

@@ -21,7 +21,7 @@ function Geometries() {
                 <mesh position={[2, 0, 0]} scale={1.5}>
                     <icosahedronGeometry args={[1, 0]} />
                     <MeshDistortMaterial
-                        color="#3b82f6"
+                        color="#FF4500"
                         speed={2}
                         distort={0.4}
                         metalness={0.8}
@@ -35,7 +35,7 @@ function Geometries() {
                 <mesh position={[-2, 1, -1]} scale={1}>
                     <boxGeometry args={[1.5, 1.5, 1.5]} />
                     <MeshDistortMaterial
-                        color="#ec4899"
+                        color="#F97316"
                         speed={3}
                         distort={0.3}
                         metalness={0.8}
@@ -49,7 +49,7 @@ function Geometries() {
                 <mesh position={[0, -2, 1]} scale={0.8}>
                     <octahedronGeometry args={[1, 0]} />
                     <MeshDistortMaterial
-                        color="#8b5cf6"
+                        color="#FF8C00"
                         speed={1}
                         distort={0.5}
                         metalness={0.8}

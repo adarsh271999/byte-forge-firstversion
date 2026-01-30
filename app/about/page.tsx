@@ -95,7 +95,7 @@ export default function About() {
                             { icon: <CheckCircle2 className="text-primary" />, title: "Precision", desc: "We obsess over details. Every pixel, every interaction, and every database query is optimized." },
                             { icon: <Zap className="text-secondary" />, title: "Speed", desc: "Performance is a feature. We build systems that are lightning-fast and responsive." },
                             { icon: <Shield className="text-accent" />, title: "Integrity", desc: "Transparent communication and honest engineering. No hidden debt, no shortcuts." },
-                            { icon: <Users className="text-blue-400" />, title: "Collaboration", desc: "We don't work for you; we work with you. Your vision becomes our blueprint." }
+                            { icon: <Users className="text-primary" />, title: "Collaboration", desc: "We don't work for you; we work with you. Your vision becomes our blueprint." }
                         ].map((item, i) => (
                             <motion.div
                                 key={i}
