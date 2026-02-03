@@ -23,13 +23,13 @@ export function Marquee() {
                     transition={{
                         repeat: Infinity,
                         ease: "linear",
-                        duration: 20,
+                        duration: 50,
                     }}
                 >
                     {[...keywords, ...keywords, ...keywords].map((word, i) => (
                         <span
                             key={i}
-                            className="text-2xl md:text-3xl font-bold text-white/20 uppercase tracking-widest font-display"
+                            className="text-2xl md:text-3xl font-bold text-white/80 uppercase tracking-widest font-display"
                         >
                             {word}
                         </span>
