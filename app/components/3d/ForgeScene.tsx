@@ -1,101 +1,74 @@
 "use client";
 
-import { Canvas, useFrame } from "@react-three/fiber";
-import { Float, Icosahedron, Octahedron, Ring } from "@react-three/drei";
-import { useRef } from "react";
-import * as THREE from "three";
-
-function CyberneticNexus() {
-    const outerRef = useRef<THREE.Mesh>(null);
-    const innerRef = useRef<THREE.Mesh>(null);
-    const ringRef = useRef<THREE.Mesh>(null);
-
-    useFrame((state, delta) => {
-        const time = state.clock.getElapsedTime();
-
-        if (outerRef.current) {
-            // Slow, heavy rotation
-            outerRef.current.rotation.x = time * 0.1;
-            outerRef.current.rotation.y = time * 0.15;
-        }
-
-        if (innerRef.current) {
-            // Faster, opposing rotation
-            innerRef.current.rotation.x = -time * 0.2;
-            innerRef.current.rotation.z = time * 0.1;
-
-            // Pulse scale
-            const scale = 1 + Math.sin(time * 3) * 0.1;
-            innerRef.current.scale.set(scale, scale, scale);
-        }
-
-        if (ringRef.current) {
-            ringRef.current.rotation.x = Math.PI / 2 + Math.sin(time * 0.5) * 0.2;
-            ringRef.current.rotation.y = time * 0.2;
-        }
-    });
-
-    return (
-        <group scale={1.2}>
-            <Float speed={2} rotationIntensity={0.5} floatIntensity={0.5}>
-
-                {/* 1. Outer Wireframe Shell - The "Hardware" */}
-                <Icosahedron args={[2, 1]} ref={outerRef}>
-                    <meshStandardMaterial
-                        color="#FF4500" // Fire Orange
-                        wireframe
-                        transparent
-                        opacity={0.3}
-                        side={THREE.DoubleSide}
-                        emissive="#FF4500"
-                        emissiveIntensity={0.2}
-                    />
-                </Icosahedron>
-
-                {/* 2. Inner Processing Core - The "AI" */}
-                <Octahedron args={[1.2, 0]} ref={innerRef}>
-                    <meshStandardMaterial
-                        color="#F97316" // Secondary Orange
-                        roughness={0.2}
-                        metalness={0.8}
-                        emissive="#FF4500"
-                        emissiveIntensity={0.5}
-                        wireframe={false} // Solid object ensures visibility
-                    />
-                </Octahedron>
-
-                {/* 3. Orbiting Data Ring - The "Connectivity" */}
-                <group ref={ringRef} rotation={[Math.PI / 2, 0, 0]}>
-                    <Ring args={[2.5, 2.6, 64]} >
-                        <meshBasicMaterial
-                            color="#FFFFFF"
-                            transparent
-                            opacity={0.1}
-                            side={THREE.DoubleSide}
-                        />
-                    </Ring>
-                </group>
-
-                {/* 4. Core Light Source */}
-                <pointLight distance={5} intensity={5} color="#FF8C00" />
-            </Float>
-        </group>
-    );
-}
+import { motion } from "motion/react";
 
 export function ForgeScene() {
     return (
-        <div className="w-full h-full relative overflow-hidden bg-black/20">
-            {/* Added a subtle background glow to separate scene from black void */}
-            <div className="absolute inset-0 bg-radial-gradient from-primary/5 to-transparent pointer-events-none" />
+        <div className="w-full h-full relative overflow-hidden flex items-center justify-center bg-black/40">
+            {/* Background enhancement */}
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5" />
 
-            <Canvas camera={{ position: [0, 0, 6], fov: 45 }}>
-                <ambientLight intensity={0.5} />
-                <pointLight position={[10, 10, 10]} intensity={2} color="#FFFFFF" />
-                <pointLight position={[-10, -5, -10]} intensity={1} color="#FF4500" />
+            {/* Central Core Container */}
+            <div className="relative w-64 h-64 md:w-80 md:h-80 flex items-center justify-center">
 
-                <CyberneticNexus />
-            </Canvas>
+                {/* 1. Orbiting Outer Rings */}
+                {[...Array(3)].map((_, i) => (
+                    <motion.div
+                        key={`ring-${i}`}
+                        className="absolute inset-0 border border-white/10 rounded-full"
+                        style={{ scale: 1 + i * 0.2 }}
+                        animate={{ rotate: 360 }}
+                        transition={{
+                            duration: 20 + i * 5,
+                            repeat: Infinity,
+                            ease: "linear",
+                            repeatType: i % 2 === 0 ? "reverse" : "loop",
+                        }}
+                    >
+                        {/* Decorative Node on Ring */}
+                        <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 bg-primary rounded-full shadow-[0_0_10px_rgba(255,255,255,0.5)]" />
+                    </motion.div>
+                ))}
+
+                {/* 2. Geometric Core (The "Solutions" metaphor) */}
+                <motion.div
+                    className="relative w-32 h-32"
+                    animate={{ rotate: -360 }}
+                    transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+                >
+                    {/* Square rotated 45deg */}
+                    <motion.div
+                        className="absolute inset-0 border-2 border-primary/30 rotate-45"
+                        animate={{ scale: [1, 1.1, 1] }}
+                        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                    />
+                    {/* Square rotated 0deg */}
+                    <div className="absolute inset-0 border-2 border-secondary/30" />
+
+                    {/* Inner glowing core */}
+                    <div className="absolute inset-4 bg-gradient-to-br from-primary/20 to-secondary/20 blur-md rounded-full animate-pulse" />
+                </motion.div>
+
+                {/* 3. Floating Data Particles */}
+                {[...Array(8)].map((_, i) => (
+                    <motion.div
+                        key={`particle-${i}`}
+                        className="absolute w-1 h-1 bg-white/40 rounded-full"
+                        initial={{ x: 0, y: 0, opacity: 0 }}
+                        animate={{
+                            x: Math.cos(i * (Math.PI / 4)) * 120, // Move outward in circle
+                            y: Math.sin(i * (Math.PI / 4)) * 120,
+                            opacity: [0, 0.8, 0],
+                        }}
+                        transition={{
+                            duration: 3,
+                            repeat: Infinity,
+                            delay: i * 0.2,
+                            ease: "easeInOut",
+                        }}
+                    />
+                ))}
+            </div>
         </div>
     );
 }
