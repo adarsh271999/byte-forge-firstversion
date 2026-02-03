@@ -2,6 +2,7 @@ import { Button } from "./components/ui/Button";
 import { HeroScene } from "./components/3d/HeroScene";
 import { ForgeScene } from "./components/3d/ForgeScene";
 import { Marquee } from "./components/ui/Marquee";
+import { ClientLogos } from "./components/ui/ClientLogos";
 import { ServiceCard } from "./components/ui/ServiceCard";
 import { ProcessSection } from "./components/ui/ProcessSection";
 import Image from "next/image";
@@ -45,6 +46,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Client Logos Section */}
+      <ClientLogos />
 
       {/* Marquee Section */}
       <section className="py-10 border-y border-white/5 bg-black/50 backdrop-blur-sm">
