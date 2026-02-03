@@ -2,8 +2,22 @@
 
 import { motion } from "motion/react";
 import Image from "next/image";
+import { useEffect, useState } from "react";
 
 export function ForgeScene() {
+    const [sparkles, setSparkles] = useState<Array<{ left: string; top: string; duration: number; delay: number }>>([]);
+
+    useEffect(() => {
+        setSparkles(
+            [...Array(5)].map(() => ({
+                left: `${50 + (Math.random() - 0.5) * 30}%`,
+                top: `${40 + (Math.random() - 0.5) * 30}%`,
+                duration: 2 + Math.random() * 2,
+                delay: Math.random() * 2,
+            }))
+        );
+    }, []);
+
     return (
         <div className="w-full h-full relative overflow-hidden flex items-center justify-center bg-black/40">
             {/* Background Enhancement - Reduced opacity slightly to blend better with the black image bg */}
@@ -29,14 +43,15 @@ export function ForgeScene() {
                 </div>
 
                 {/* Overlay Particle Effects for "Alive" feel */}
+
                 <div className="absolute inset-0 pointer-events-none">
-                    {[...Array(5)].map((_, i) => (
+                    {sparkles.map((sparkle, i) => (
                         <motion.div
                             key={`sparkle-${i}`}
                             className="absolute w-1 h-1 bg-primary rounded-full shadow-[0_0_5px_rgba(249,115,22,0.8)]"
                             style={{
-                                left: `${50 + (Math.random() - 0.5) * 30}%`,
-                                top: `${40 + (Math.random() - 0.5) * 30}%`,
+                                left: sparkle.left,
+                                top: sparkle.top,
                             }}
                             animate={{
                                 opacity: [0, 1, 0],
@@ -44,9 +59,9 @@ export function ForgeScene() {
                                 y: -20
                             }}
                             transition={{
-                                duration: 2 + Math.random() * 2,
+                                duration: sparkle.duration,
                                 repeat: Infinity,
-                                delay: Math.random() * 2,
+                                delay: sparkle.delay,
                                 ease: "easeInOut"
                             }}
                         />
